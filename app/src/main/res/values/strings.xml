@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">HKM</string>
+    <string name="base_url">http://138.201.250.96/~hkmsports/api/rest/mobapi/</string>
+    <string name="categories">categories</string>
+    <string name="attrs">attributes</string>
+    <string name="users">customers</string>
+    <string name="products">products</string>
+    <string name="from_api_to_db"><![CDATA[API->DB]]></string>
+    <string name="from_db_to_list"><![CDATA[DB->List]]></string>
+    <string name="no_data">no data</string>
+    <string name="check_connection">check internet connection</string>
+    <string name="price">Price:</string>
+    <string name="add_to_cart">add to cart</string>
+    <string name="loading">loading </string>
+    <string name="log">log</string>
+    <string name="ms">ms</string>
+    <string name="art">Art. No.:</string>
+    <string name="price_from">Price from:</string>
+    <string name="price_for_sale">Price for sale:</string>
+    <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</string>
+</resources>
