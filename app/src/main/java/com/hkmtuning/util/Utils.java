@@ -18,6 +18,8 @@ public class Utils {
 
   private Context context;
   private DB snappydb;
+  List<Products> list = new ArrayList();
+  List<Products> listByCategory = new ArrayList();
 
   public Utils(Context context) {
     this.context = context;
@@ -47,8 +49,8 @@ public class Utils {
 
   public List getFromDB(String key, String category) {
 
-    List<Products> list = new ArrayList();
-    List<Products> listByCategory = new ArrayList();
+    list.clear();
+    listByCategory.clear();
 
     try {
       snappydb = DBFactory.open(context);
@@ -57,7 +59,7 @@ public class Utils {
       for (int i = 0; i < list.size(); i++) {
         Products product = list.get(i);
         for (int j = 0; j < product.getCategory().size(); j++) {
-          if (product.getCategory().get(j).getCat().equals(category)){
+          if (product.getCategory().get(j).getCat().equals(category)) {
             listByCategory.add(product);
             break;
           }
@@ -68,6 +70,7 @@ public class Utils {
     } catch (SnappydbException e) {
 
     }
+
     return listByCategory;
   }
 }

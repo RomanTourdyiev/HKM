@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hkmtuning.R;
 import com.hkmtuning.api.items.product.Products;
@@ -31,7 +32,10 @@ public class FragmentProducts extends Fragment {
 
   private AdapterProducts adapter;
 
-  private List<Products> products;
+  private List<Products> products = new ArrayList<>();
+  private List<Products> productsCut = new ArrayList<>();
+  private int lastPosition = 0;
+  private boolean loadMore = true;
 
 
   @Override
@@ -57,7 +61,7 @@ public class FragmentProducts extends Fragment {
   public void getFromDB(String categoryId, String categoryName) {
     ((ActivityMain) getActivity()).startCountTime();
     AsyncTaskProducts asyncTaskProducts = new AsyncTaskProducts();
-    asyncTaskProducts.execute(categoryId,categoryName);
+    asyncTaskProducts.execute(categoryId, categoryName);
   }
 
   private class AsyncTaskProducts extends AsyncTask<String, Void, Void> {
@@ -69,8 +73,12 @@ public class FragmentProducts extends Fragment {
     protected void onPreExecute() {
       super.onPreExecute();
       products = new ArrayList<>();
+      productsCut = new ArrayList<>();
+      lastPosition = 0;
+      loadMore = true;
       progressBar.setVisibility(View.VISIBLE);
       noData.setVisibility(View.GONE);
+      productsRecycler.setVisibility(View.GONE);
     }
 
     @Override
@@ -80,6 +88,17 @@ public class FragmentProducts extends Fragment {
       products = ((ActivityMain) getActivity())
           .getUtils()
           .getFromDB(getResources().getString(R.string.products), categoryId);
+
+      for (int i = 0; i < 12; i++) {
+        if (products.size() > i + lastPosition) {
+          productsCut.add(products.get(i + lastPosition));
+        } else {
+          loadMore = !loadMore;
+          break;
+        }
+      }
+      lastPosition = lastPosition + 12;
+
       return null;
     }
 
@@ -89,19 +108,60 @@ public class FragmentProducts extends Fragment {
       if (products.size() == 0) {
         noData.setVisibility(View.VISIBLE);
       } else {
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3);
+        productsRecycler.setVisibility(View.VISIBLE);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 4);
         adapter = new AdapterProducts(
             getActivity(),
             FragmentProducts.this,
-            products,
+            productsCut,
             categoryName);
         productsRecycler.setLayoutManager(gridLayoutManager);
         productsRecycler.setAdapter(adapter);
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+          @Override
+          public int getSpanSize(int position) {
+            if (adapter.getItemViewType(position) == adapter.VIEW_TYPE_ITEM) {
+              return 1;
+            } else {
+              return 4;
+            }
+          }
+        });
+      }
+      if (!loadMore){
+        adapter.hideLoadingItem();
       }
       progressBar.setVisibility(View.GONE);
-      ((ActivityMain) getActivity()).stopCountTime(getResources().getString(R.string.products) +
-          " " +
-          getResources().getString(R.string.from_db_to_list)+ " (category "+categoryId+")");
+      ((ActivityMain) getActivity()).stopCountTime(
+          getResources().getString(R.string.products) +
+              " " +
+              getResources().getString(R.string.from_db_to_list) +
+              " (category " + categoryId + ")");
+    }
+  }
+
+
+  public void loadMore() {
+    if (loadMore) {
+
+      for (int i = 0; i < 12; i++) {
+        if (products.size() > i + lastPosition) {
+          productsCut.add(products.get(i + lastPosition));
+        } else {
+          loadMore = !loadMore;
+          adapter.hideLoadingItem();
+          break;
+        }
+      }
+      lastPosition = lastPosition + 12;
+
+//      Toast.makeText(getActivity(), "load more", Toast.LENGTH_SHORT).show();
+      productsRecycler.post(new Runnable() {
+        @Override
+        public void run() {
+            adapter.notifyDataSetChanged();
+        }
+      });
     }
   }
 
