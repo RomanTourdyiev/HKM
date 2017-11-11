@@ -1,6 +1,7 @@
 package com.hkmtuning.ui.adapters;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.hkmtuning.R;
 import com.hkmtuning.api.items.product.Products;
 import com.hkmtuning.ui.activities.ActivityMain;
@@ -96,6 +98,10 @@ public class AdapterProducts extends RecyclerView.Adapter<AdapterProducts.ViewHo
     if (getItemViewType(i) == VIEW_TYPE_ITEM) {
       holder.title.setText(list.get(holder.getAdapterPosition()).getName_translate_en());
       holder.price.setText(list.get(holder.getAdapterPosition()).getPrice());
+      Glide.with(context).load(
+          Uri.parse("file:///android_asset"+
+          list.get(holder.getAdapterPosition()).getPath()+
+              list.get(holder.getAdapterPosition()).getImage())).into(holder.image);
 
       itemView.setOnClickListener(new View.OnClickListener() {
         @Override
