@@ -89,7 +89,7 @@ public class FragmentProducts extends Fragment {
           .getUtils()
           .getFromDB(getResources().getString(R.string.products), categoryId);
 
-      for (int i = 0; i < 12; i++) {
+      for (int i = 0; i < 16; i++) {
         if (products.size() > i + lastPosition) {
           productsCut.add(products.get(i + lastPosition));
         } else {
@@ -97,7 +97,7 @@ public class FragmentProducts extends Fragment {
           break;
         }
       }
-      lastPosition = lastPosition + 12;
+      lastPosition = lastPosition + 16;
 
       return null;
     }
@@ -113,6 +113,7 @@ public class FragmentProducts extends Fragment {
         adapter = new AdapterProducts(
             getActivity(),
             FragmentProducts.this,
+            productsRecycler,
             productsCut,
             categoryName);
         productsRecycler.setLayoutManager(gridLayoutManager);
@@ -144,7 +145,7 @@ public class FragmentProducts extends Fragment {
   public void loadMore() {
     if (loadMore) {
 
-      for (int i = 0; i < 12; i++) {
+      for (int i = 0; i < 16; i++) {
         if (products.size() > i + lastPosition) {
           productsCut.add(products.get(i + lastPosition));
         } else {
@@ -153,7 +154,7 @@ public class FragmentProducts extends Fragment {
           break;
         }
       }
-      lastPosition = lastPosition + 12;
+      lastPosition = lastPosition + 16;
 
 //      Toast.makeText(getActivity(), "load more", Toast.LENGTH_SHORT).show();
       productsRecycler.post(new Runnable() {

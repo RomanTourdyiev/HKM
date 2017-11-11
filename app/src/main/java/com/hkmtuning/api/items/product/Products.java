@@ -23,7 +23,7 @@ public class Products implements Serializable
 
   private String desc_translate_en;
 
-  private Child[] child;
+  private List<Child> child;
 
   private String id;
 
@@ -159,12 +159,12 @@ public class Products implements Serializable
     this.desc_translate_en = desc_translate_en;
   }
 
-  public Child[] getChild ()
+  public List<Child> getChild ()
   {
     return child;
   }
 
-  public void setChild (Child[] child)
+  public void setChild (List<Child> child)
   {
     this.child = child;
   }

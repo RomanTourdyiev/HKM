@@ -60,6 +60,7 @@ public class Utils {
         Products product = list.get(i);
         for (int j = 0; j < product.getCategory().size(); j++) {
           if (product.getCategory().get(j).getCat().equals(category)) {
+            if (Integer.parseInt(product.getStatus())!=0)
             listByCategory.add(product);
             break;
           }
