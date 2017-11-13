@@ -67,31 +67,31 @@ public class AdapterChildProducts
     holder.color.setText(item.getColor());
     holder.size.setText(item.getSize());
     holder.qty.setText(item.getQty());
-    holder.availability.setVisibility(View.VISIBLE);
 
     if (Integer.parseInt(item.getIs_in_stock()) == 0) {
       holder.availability.setBackgroundTintList(context.getResources().getColorStateList(R.color.red_500));
       holder.availability.setImageResource(R.drawable.ic_not_interested_white_24dp);
+
     } else if (Integer.parseInt(item.getIs_in_stock()) == 1) {
 
-      if (item.getPrd_available_from().length()==0 && item.getPrd_publication_date().length()==0){
+      if (item.getPrd_available_from()==null && item.getPrd_publication_date()==null){
         holder.availability.setBackgroundTintList(context.getResources().getColorStateList(R.color.teal_500));
         holder.availability.setImageResource(R.drawable.ic_event_available_white_24dp);
-        if (((ActivityMain)context).getUtils().whichDateIsGreater(
-            ((ActivityMain)context).getUtils().todayToString(),
-            item.getPrd_publication_date())==2
-            ){
-          holder.availability.setBackgroundTintList(context.getResources().getColorStateList(R.color.teal_300));
-          holder.availability.setImageResource(R.drawable.ic_access_time_white_24dp);
-        } else {
-          holder.availability.setBackgroundTintList(context.getResources().getColorStateList(R.color.blue_grey_200));
-          holder.availability.setImageResource(R.drawable.ic_access_time_white_24dp);
+        if (item.getPrd_publication_date()!=null) {
+          if (((ActivityMain) context).getUtils().whichDateIsGreater(
+              ((ActivityMain) context).getUtils().todayToString(),
+              item.getPrd_publication_date()) == 2
+              ) {
+            holder.availability.setBackgroundTintList(context.getResources().getColorStateList(R.color.teal_300));
+            holder.availability.setImageResource(R.drawable.ic_access_time_white_24dp);
+          } else {
+            holder.availability.setBackgroundTintList(context.getResources().getColorStateList(R.color.blue_grey_200));
+            holder.availability.setImageResource(R.drawable.ic_access_time_white_24dp);
+          }
         }
 
       }
 
-    } else {
-      holder.availability.setVisibility(View.GONE);
     }
 
 
