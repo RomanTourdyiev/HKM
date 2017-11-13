@@ -3,6 +3,7 @@ package com.hkmtuning.ui.adapters;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
@@ -50,8 +51,8 @@ public class AdapterChildProducts
 
   @Override
   public AdapterChildProducts.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-      View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_child_product, viewGroup, false);
-      return new AdapterChildProducts.ViewHolder(view);
+    View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_child_product, viewGroup, false);
+    return new AdapterChildProducts.ViewHolder(view);
   }
 
   public int getItemCount() {
@@ -61,24 +62,54 @@ public class AdapterChildProducts
   @Override
   public void onBindViewHolder(final AdapterChildProducts.ViewHolder holder, int i) {
     final View itemView = holder.itemView;
-      holder.sku.setText(list.get(holder.getAdapterPosition()).getSku());
-      holder.color.setText(list.get(holder.getAdapterPosition()).getColor());
-      holder.size.setText(list.get(holder.getAdapterPosition()).getSize());
-      holder.qty.setText(list.get(holder.getAdapterPosition()).getQty());
+    Child item = list.get(holder.getAdapterPosition());
+    holder.sku.setText(item.getSku());
+    holder.color.setText(item.getColor());
+    holder.size.setText(item.getSize());
+    holder.qty.setText(item.getQty());
+    holder.availability.setVisibility(View.VISIBLE);
 
-      itemView.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
+    if (Integer.parseInt(item.getIs_in_stock()) == 1) {
+      holder.availability.setBackgroundTintList(context.getResources().getColorStateList(R.color.teal_500));
+      holder.availability.setImageResource(R.drawable.ic_event_available_white_24dp);
+    } else if (Integer.parseInt(item.getIs_in_stock()) == 0) {
 
+      if (item.getPrd_available_from().length()==0 && item.getPrd_publication_date().length()==0){
+        holder.availability.setBackgroundTintList(context.getResources().getColorStateList(R.color.red_500));
+        holder.availability.setImageResource(R.drawable.ic_not_interested_white_24dp);
+      } else {
+        if (((ActivityMain)context).getUtils().whichDateIsGreater(
+            ((ActivityMain)context).getUtils().todayToString(),
+            item.getPrd_publication_date())==2
+            ){
+          holder.availability.setBackgroundTintList(context.getResources().getColorStateList(R.color.teal_300));
+          holder.availability.setImageResource(R.drawable.ic_access_time_white_24dp);
+        } else {
+          holder.availability.setBackgroundTintList(context.getResources().getColorStateList(R.color.blue_grey_200));
+          holder.availability.setImageResource(R.drawable.ic_access_time_white_24dp);
         }
-      });
+
+      }
+
+    } else {
+      holder.availability.setVisibility(View.GONE);
+    }
+
+
+    itemView.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+
+      }
+    });
   }
 
   public static class ViewHolder extends RecyclerView.ViewHolder {
-    protected TextView sku;
-    protected TextView color;
-    protected TextView size;
-    protected TextView qty;
+    private TextView sku;
+    private TextView color;
+    private TextView size;
+    private TextView qty;
+    private FloatingActionButton availability;
 
     public ViewHolder(View view) {
       super(view);
@@ -86,6 +117,7 @@ public class AdapterChildProducts
       this.color = view.findViewById(R.id.color);
       this.size = view.findViewById(R.id.size);
       this.qty = view.findViewById(R.id.qty);
+      this.availability = view.findViewById(R.id.availability);
     }
   }
 }
