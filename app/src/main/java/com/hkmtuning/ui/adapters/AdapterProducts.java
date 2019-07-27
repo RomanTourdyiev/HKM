@@ -39,7 +39,6 @@ public class AdapterProducts
 
   public final int VIEW_TYPE_ITEM = 0;
   public final int VIEW_TYPE_LOADING = 1;
-  private boolean initLoad = true;
   private boolean hideLoadingItem = false;
 
   private OnScrollListener onScrollListener = new OnScrollListener() {
